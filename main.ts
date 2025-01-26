@@ -5,7 +5,8 @@ import { fromModelToDeck } from "./utils.ts";
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
 if (!MONGO_URL) {
-  throw new Error("elol")
+  Deno.exit(1) 
+  console.log("no hay url")
 }
 
 const client = new MongoClient(MONGO_URL);
@@ -72,7 +73,7 @@ export async function handler (req: Request):Promise<Response> {
         }))
 
     }
-    
+
   }
 
   else if(method === "/PUT"){
