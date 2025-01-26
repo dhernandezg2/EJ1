@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId } from 'mongodb'
+import { Collection, MongoClient, ObjectId } from 'mongodb'
 import { deckModel } from "./types.ts";
 import { fromModelToDeck } from "./utils.ts";
 
@@ -8,23 +8,27 @@ if (!MONGO_URL) {
   throw new Error("error MONGO_URL");
 }
 
-const client = new MongoClient(MONGO_URL);
-await client.connect();
-console.info("Connected to MongoDB");
+let client: MongoClient | null = null;
+let deckCollection: Collection<deckModel> | null = null;
+
+if(MONGO_URL){
+  client = new MongoClient(MONGO_URL)
+  await client.connect();
+  console.info("Connected to MongoDB");
 
 const db = client.db("magic");
-
-const deckCollection = db.collection<deckModel>("deck");
+deckCollection = db.collection<deckModel>("deck");
+}
 
 
 export async function handler (req: Request):Promise<Response> {
+
+  if(!client || !deckCollection) throw new Error ("elol")
 
   const method = req.method;
   const url = new URL(req.url);
   const path = url.pathname;
   
-
-
   if(method === "GET") {
       if(path === "/decks") {
           const mazos = await deckCollection.find().toArray()
