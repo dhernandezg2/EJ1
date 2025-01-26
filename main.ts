@@ -72,6 +72,7 @@ export async function handler (req: Request):Promise<Response> {
         }))
 
     }
+    
   }
 
   else if(method === "/PUT"){
