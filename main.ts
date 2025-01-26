@@ -5,8 +5,8 @@ import { fromModelToDeck } from "./utils.ts";
 
 const MONGO_URL = Deno.env.get("MONGO_URL");
 if (!MONGO_URL) {
-  Deno.exit(-1) 
-  console.log("no hay url")
+  console.error("No se ha encontrado la URL de MongoDB en las variables de entorno.");
+  throw new Error("Missing MONGO_URL environment variable");
 }
 
 const client = new MongoClient(MONGO_URL);
